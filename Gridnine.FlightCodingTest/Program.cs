@@ -16,7 +16,7 @@ namespace Gridnine.FlightCodingTest
 
             Console.WriteLine("1. Вылет до текущего момента времени");
             //Создаем экземпляр класса правила
-            RuleDepartureUntilTime firstRule = new RuleDepartureUntilTime();
+            RuleDepartureUntilTime firstRule = new RuleDepartureUntilTime() { untilTime = DateTime.Now };
 
             // Передаем в статический метод фильтрации список полетов и правило фильтрации
             var firstFlights = FlightsFiltration.FindFlights(flights, firstRule.Filtration);
@@ -30,7 +30,7 @@ namespace Gridnine.FlightCodingTest
             FlightsFiltration.PrintFlights(secondFlights);
 
             Console.WriteLine("3. Общее время, проведённое на земле превышает два часа ");
-            RuleOnTheGroundMoreThenTime thirdRule = new RuleOnTheGroundMoreThenTime();
+            RuleOnTheGroundMoreThanTime thirdRule = new RuleOnTheGroundMoreThanTime() { moreThenTime = 2 };
             var thirdFlights = FlightsFiltration.FindFlights(flights, thirdRule.Filtration);
             FlightsFiltration.PrintFlights(thirdFlights);
 

@@ -13,7 +13,7 @@ namespace Gridnine.FlightCodingTest.RuleFiltration
     {
         public static List<IRuleFilter> Rules = new List<IRuleFilter>() {
                                                         new RuleDepartureUntilTime(),
-                                                        new RuleOnTheGroundMoreThenTime(),
+                                                        new RuleOnTheGroundMoreThanTime(),
                                                         new RuleArrivalBeforeDeparture()};
     }
 
@@ -23,7 +23,7 @@ namespace Gridnine.FlightCodingTest.RuleFiltration
     public class RuleDepartureUntilTime : IRuleFilter
     {
 
-        private DateTime _untilTime = DateTime.Now;
+        public DateTime untilTime;
         public string NameRule => "Departure until time";
 
         public void EnterParameters()
@@ -31,10 +31,10 @@ namespace Gridnine.FlightCodingTest.RuleFiltration
             Console.Write("Indicate the date before which the departure took place, Enter - current date (format dd-mm-yyyy hh:mm): ");
             var param = Console.ReadLine();
             if (param == "")
-                _untilTime = DateTime.Now;
+                untilTime = DateTime.Now;
             else
             {
-                while (!DateTime.TryParse(Console.ReadLine(), out _untilTime))
+                while (!DateTime.TryParse(Console.ReadLine(), out untilTime))
                 {
                     Console.WriteLine("Indicate correct date");
                 }
@@ -42,16 +42,16 @@ namespace Gridnine.FlightCodingTest.RuleFiltration
         }
         public bool Filtration(Flight flight)
         {
-            return flight.Segments[0].DepartureDate >= _untilTime;
+            return flight.Segments[0].DepartureDate >= untilTime;
         }
     }
 
     /// <summary>
     /// Rule excludes flights with time on the ground more than indicates
     /// </summary>
-    public class RuleOnTheGroundMoreThenTime : IRuleFilter
+    public class RuleOnTheGroundMoreThanTime : IRuleFilter
     {
-        private double _moreThenTime = 2;
+        public double moreThenTime;
         public string NameRule => "Time on the ground";
         public bool Filtration(Flight flight)
         {
@@ -60,13 +60,13 @@ namespace Gridnine.FlightCodingTest.RuleFiltration
             {
                 timeOnTheGround += flight.Segments[i].DepartureDate - flight.Segments[i - 1].ArrivalDate;
             }
-            return TimeSpan.FromHours(_moreThenTime) > timeOnTheGround;
+            return TimeSpan.FromHours(moreThenTime) > timeOnTheGround;
         }
 
         public void EnterParameters()
         {
             Console.Write("How many hours spent on the ground: ");
-            while(!double.TryParse(Console.ReadLine(), out _moreThenTime))
+            while(!double.TryParse(Console.ReadLine(), out moreThenTime))
             {
                 Console.WriteLine("Indicate correct time");
             }
